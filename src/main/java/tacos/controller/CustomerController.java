@@ -1,5 +1,6 @@
 package tacos.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.web.bind.annotation.GetMapping;
@@ -7,8 +8,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import lombok.AllArgsConstructor;
+import tacos.dto.CustomerResponse;
 import tacos.entity.Customer;
-import tacos.response.CustomerResponse;
+import tacos.mapper.CustomerMapper;
 import tacos.service.CustomerService;
 
 @RestController
@@ -17,6 +19,7 @@ import tacos.service.CustomerService;
 public class CustomerController {
 	
 	CustomerService customerService;
+	CustomerMapper customerMapper;
 
 	@GetMapping("/")
 	public CustomerResponse getCustomer() {
@@ -24,8 +27,15 @@ public class CustomerController {
 	}
 	
 	@GetMapping("/all")
-	public List<Customer> getAllCustomer() {
-		return customerService.getAll();
+	public List<CustomerResponse> getAllCustomer() {
+		List<Customer> customerList = customerService.getAll();
+		List<CustomerResponse> customerResponseList = new ArrayList<>();
+		
+		customerList.stream().forEach(customer -> {
+			customerResponseList.add(customerMapper.toCustomerResponse(customer));
+		});
+		
+		return customerResponseList;
 	}
 	
 }
