@@ -1,7 +1,5 @@
 package tacos.entity;
 
-import java.util.UUID;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -26,7 +24,7 @@ public class Customer {
         strategy = "org.hibernate.id.UUIDGenerator"
     )
     @Column(name = "id", updatable = false, nullable = false)
-	private UUID id;
+	private String id;
 	
 	private String name;
 	private String mail;

@@ -1,12 +1,12 @@
 package tacos.controller;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.validation.Valid;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -14,8 +14,8 @@ import org.springframework.web.bind.annotation.RestController;
 import lombok.AllArgsConstructor;
 import tacos.dto.CustomerRequest;
 import tacos.dto.CustomerResponse;
-import tacos.entity.Customer;
-import tacos.mapper.CustomerMapper;
+import tacos.dto.CustomerUpdateRequest;
+import tacos.exception.ResourceNotFoundException;
 import tacos.service.CustomerService;
 
 @RestController
@@ -24,7 +24,6 @@ import tacos.service.CustomerService;
 public class CustomerController {
 	
 	CustomerService customerService;
-	CustomerMapper customerMapper;
 
 	@GetMapping("/")
 	public CustomerResponse getCustomer() {
@@ -33,19 +32,17 @@ public class CustomerController {
 	
 	@GetMapping("/all")
 	public List<CustomerResponse> getAllCustomer() {
-		List<Customer> customerList = customerService.getAll();
-		List<CustomerResponse> customerResponseList = new ArrayList<>();
-		
-		customerList.stream().forEach(customer -> {
-			customerResponseList.add(customerMapper.toCustomerResponse(customer));
-		});
-		
-		return customerResponseList;
+		return this.customerService.getAll();
 	}
 	
 	@PostMapping("/")
 	public CustomerResponse createCustomer(@Valid @RequestBody CustomerRequest request) {
-		return this.customerMapper.toCustomerResponse(this.customerService.createCustomer(request));
+		return this.customerService.createCustomer(request);
+	}
+	
+	@PutMapping("/")
+	public CustomerResponse updateCustomer(@Valid @RequestBody CustomerUpdateRequest request) throws ResourceNotFoundException {
+		return this.customerService.updateCustomer(request);
 	}
 	
 }
