@@ -3,6 +3,8 @@ package tacos.controller;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.validation.Valid;
+
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -42,7 +44,7 @@ public class CustomerController {
 	}
 	
 	@PostMapping("/")
-	public CustomerResponse createCustomer(@RequestBody CustomerRequest request) {
+	public CustomerResponse createCustomer(@Valid @RequestBody CustomerRequest request) {
 		return this.customerMapper.toCustomerResponse(this.customerService.createCustomer(request));
 	}
 	
