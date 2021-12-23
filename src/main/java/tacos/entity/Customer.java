@@ -1,5 +1,8 @@
 package tacos.entity;
 
+import java.util.UUID;
+
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -17,9 +20,13 @@ import lombok.Setter;
 public class Customer {
 
 	@Id
-	@GenericGenerator(name = "uuid", strategy = "org.hibernate.id.UUIDGenerator")
-	@GeneratedValue(generator = "uuid")
-	private String id;
+	@GeneratedValue(generator = "UUID")
+    @GenericGenerator(
+        name = "UUID",
+        strategy = "org.hibernate.id.UUIDGenerator"
+    )
+    @Column(name = "id", updatable = false, nullable = false)
+	private UUID id;
 	
 	private String name;
 	private String mail;
