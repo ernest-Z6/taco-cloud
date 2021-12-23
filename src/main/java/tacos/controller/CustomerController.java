@@ -4,10 +4,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import lombok.AllArgsConstructor;
+import tacos.dto.CustomerRequest;
 import tacos.dto.CustomerResponse;
 import tacos.entity.Customer;
 import tacos.mapper.CustomerMapper;
@@ -36,6 +39,11 @@ public class CustomerController {
 		});
 		
 		return customerResponseList;
+	}
+	
+	@PostMapping("/")
+	public CustomerResponse createCustomer(@RequestBody CustomerRequest request) {
+		return this.customerMapper.toCustomerResponse(this.customerService.createCustomer(request));
 	}
 	
 }
