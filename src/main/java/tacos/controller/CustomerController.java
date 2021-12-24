@@ -7,6 +7,7 @@ import javax.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -50,6 +51,11 @@ public class CustomerController {
 	
 	@DeleteMapping
 	public ResponseEntity<String> deleteCustomer(@RequestParam String id) throws ResourceNotFoundException {
+		return this.customerService.deleteCustoemr(id);
+	}
+	
+	@DeleteMapping("/{id}")
+	public ResponseEntity<String> deleteCustomer2(@PathVariable String id) throws ResourceNotFoundException {
 		return this.customerService.deleteCustoemr(id);
 	}
 	
