@@ -3,10 +3,13 @@ package tacos.service;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import tacos.dto.CustomerRequest;
 import tacos.dto.CustomerResponse;
 import tacos.dto.CustomerUpdateRequest;
@@ -14,9 +17,11 @@ import tacos.entity.Customer;
 import tacos.exception.ResourceNotFoundException;
 import tacos.mapper.CustomerMapper;
 import tacos.repository.CustomerRepository;
+import tacos.util.MessageConstants;
 
 @Service
 @AllArgsConstructor
+@Slf4j
 public class CustomerService {
 
 	CustomerRepository customerRepository;
@@ -40,7 +45,7 @@ public class CustomerService {
 	
 	public CustomerResponse updateCustomer(CustomerUpdateRequest request) throws ResourceNotFoundException {
 		Customer customer = this.customerRepository.findById(request.getId())
-				.orElseThrow(() -> new ResourceNotFoundException("Customer not found."));
+				.orElseThrow(() -> new ResourceNotFoundException(MessageConstants.CUSTOMER_NOT_FOUND));
 		Boolean updateFlag = false;
 		if (!ObjectUtils.isEmpty(request.getName())) {
 			customer.setName(request.getName());
@@ -56,4 +61,12 @@ public class CustomerService {
 		return this.customerMapper.toCustomerResponse(customer);
 	}
 	
+	public ResponseEntity<String> deleteCustoemr(String id) throws ResourceNotFoundException {
+		log.info("delete customer " + id);
+		Customer customer = this.customerRepository
+				.findById(id)
+				.orElseThrow(() -> new ResourceNotFoundException(MessageConstants.CUSTOMER_NOT_FOUND));
+		this.customerRepository.delete(customer);
+		return new ResponseEntity<>("Deleted customer " + id + ".", HttpStatus.OK);
+	}
 }

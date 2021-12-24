@@ -4,11 +4,14 @@ import java.util.List;
 
 import javax.validation.Valid;
 
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import lombok.AllArgsConstructor;
@@ -25,7 +28,7 @@ public class CustomerController {
 	
 	CustomerService customerService;
 
-	@GetMapping("/")
+	@GetMapping
 	public CustomerResponse getCustomer() {
 		return new CustomerResponse("John", "John.Ross@dbschenker.com");
 	}
@@ -35,14 +38,19 @@ public class CustomerController {
 		return this.customerService.getAll();
 	}
 	
-	@PostMapping("/")
+	@PostMapping
 	public CustomerResponse createCustomer(@Valid @RequestBody CustomerRequest request) {
 		return this.customerService.createCustomer(request);
 	}
 	
-	@PutMapping("/")
+	@PutMapping
 	public CustomerResponse updateCustomer(@Valid @RequestBody CustomerUpdateRequest request) throws ResourceNotFoundException {
 		return this.customerService.updateCustomer(request);
+	}
+	
+	@DeleteMapping
+	public ResponseEntity<String> deleteCustomer(@RequestParam String id) throws ResourceNotFoundException {
+		return this.customerService.deleteCustoemr(id);
 	}
 	
 }
