@@ -35,5 +35,23 @@ public class CustomerRepositoryTest {
 		
 	}
 	
+	@Test
+	void whenFindByNameAndMail_thenReturnCustomer() {
+		//given
+		Customer alex = new Customer();
+		alex.setName("alex");
+		alex.setMail("alex@gmail.com");
+		
+		testEntityManager.persist(alex);
+		testEntityManager.flush();
+		
+		//when
+		Customer customer = this.customerRepository.findByNameAndMail("alex", "alex@gmail.com");
+		
+		//then
+		assertThat(customer.getName()).isEqualTo(alex.getName());
+		
+	}
+	
 	
 }
