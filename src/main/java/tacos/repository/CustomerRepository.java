@@ -8,4 +8,6 @@ import tacos.entity.Customer;
 @Repository
 public interface CustomerRepository extends JpaRepository<Customer, String> {
 
+	Customer findByName(String name);
+	
 }
