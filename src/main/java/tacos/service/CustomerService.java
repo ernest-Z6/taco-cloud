@@ -3,6 +3,10 @@ package tacos.service;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -68,5 +72,17 @@ public class CustomerService {
 				.orElseThrow(() -> new ResourceNotFoundException(MessageConstants.CUSTOMER_NOT_FOUND));
 		this.customerRepository.delete(customer);
 		return new ResponseEntity<>("Deleted customer " + id + ".", HttpStatus.OK);
+	}
+	
+	public Page<CustomerResponse> getAllWithPagination(Integer pageNo, Integer pageSize) {
+		Pageable pageable = PageRequest.of(pageNo, pageSize);
+		Page<Customer> customerPage = this.customerRepository.findAll(pageable);
+		
+		List<CustomerResponse> customerResponseList = new ArrayList<>();
+		customerPage.stream().forEach(customer -> {
+			customerResponseList.add(this.customerMapper.toCustomerResponse(customer));
+		});
+		
+		return new PageImpl<>(customerResponseList, customerPage.getPageable(), customerPage.getTotalElements());
 	}
 }

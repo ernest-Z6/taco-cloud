@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.validation.Valid;
 
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -59,4 +60,8 @@ public class CustomerController {
 		return this.customerService.deleteCustoemr(id);
 	}
 	
+	@GetMapping("/allWithPagination")
+	public Page<CustomerResponse> getAllCustomerWithPagination(@RequestParam Integer pageNo, @RequestParam Integer pageSize) {
+		return this.customerService.getAllWithPagination(pageNo, pageSize);
+	}
 }
