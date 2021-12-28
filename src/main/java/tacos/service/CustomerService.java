@@ -7,6 +7,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -84,5 +85,17 @@ public class CustomerService {
 		});
 		
 		return new PageImpl<>(customerResponseList, customerPage.getPageable(), customerPage.getTotalElements());
+	}
+	
+	public List<CustomerResponse> getAllWithSorting() {
+		Sort sort = Sort.by(Sort.Direction.ASC, "name");
+		List<Customer> customerList = this.customerRepository.findAll(sort);
+
+		List<CustomerResponse> customerResponseList = new ArrayList<>();
+		customerList.stream().forEach(customer -> {
+			customerResponseList.add(this.customerMapper.toCustomerResponse(customer));
+		});
+		
+		return customerResponseList;
 	}
 }

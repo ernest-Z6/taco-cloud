@@ -64,4 +64,10 @@ public class CustomerController {
 	public Page<CustomerResponse> getAllCustomerWithPagination(@RequestParam Integer pageNo, @RequestParam Integer pageSize) {
 		return this.customerService.getAllWithPagination(pageNo, pageSize);
 	}
+	
+	@GetMapping("/allWithSorting")
+	public List<CustomerResponse> getAllCustomerWithSorting() {
+		return this.customerService.getAllWithSorting();
+	}
+	
 }
