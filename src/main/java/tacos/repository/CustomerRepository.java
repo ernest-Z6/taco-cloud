@@ -23,4 +23,7 @@ public interface CustomerRepository extends JpaRepository<Customer, String> {
 	List<Customer> findByFirstNameIsContaining(String firstName);
 	
 	List<Customer> findByLastNameLike(String firstName);
+	
+	List<Customer> findByFirstNameStartsWith(String prefex);
+	List<Customer> findByLastNameEndsWith(String suffix);
 }

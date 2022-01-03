@@ -94,5 +94,10 @@ public class CustomerRepositoryTest {
 		customerList = this.customerRepository.findByLastNameLike("%os%");
 		assertThat(customerList.size()).isEqualTo(2);
 		
+		customerList =  this.customerRepository.findByFirstNameStartsWith("ko");
+		assertThat(customerList.size()).isEqualTo(1);
+		
+		customerList = this.customerRepository.findByLastNameEndsWith("ss");
+		assertThat(customerList.size()).isEqualTo(2);
 	}
 }
