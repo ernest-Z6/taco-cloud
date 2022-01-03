@@ -106,4 +106,15 @@ public class CustomerService {
 		
 		return customerResponseList;
 	}
+	
+	public List<CustomerResponse> like(String firstName) {
+		List<Customer> customerList = this.customerRepository.findByFirstNameContains(firstName);
+		
+		List<CustomerResponse> customerResponseList = new ArrayList<>();
+		customerList.stream().forEach(customer -> {
+			customerResponseList.add(this.customerMapper.toCustomerResponse(customer));
+		});
+		
+		return customerResponseList;
+	}
 }
