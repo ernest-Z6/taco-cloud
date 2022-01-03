@@ -10,11 +10,11 @@ import tacos.entity.Customer;
 @Repository
 public interface CustomerRepository extends JpaRepository<Customer, String> {
 
-	Customer findByName(String name);
+	Customer findByFirstName(String name);
 	
-	Customer findByNameAndMail(String name, String mail);
+	Customer findByFirstNameAndLastNameAndMail(String firstName, String lastName, String mail);
 	
-	List<Customer> findByNameOrMail(String name, String mail);
+	List<Customer> findByFirstNameOrMail(String firstName, String mail);
 	
-	List<Customer> findByNameIn(List<String> names);
+	List<Customer> findByFirstNameIn(List<String> firstNames);
 }

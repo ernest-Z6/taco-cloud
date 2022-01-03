@@ -11,11 +11,19 @@ import lombok.Setter;
 @Getter
 public class CustomerRequest {
 	
-	@JsonProperty("customerName")
+	@JsonProperty("customerFirstName")
 	@NotBlank
-	private String name;
+	private String firstName;
 	
-	@JsonProperty("customerEmail")
+	@JsonProperty("customerLastName")
+	@NotBlank
+	private String lastName;
+	
+	@JsonProperty("customerMail")
 	private String mail;
+	
+	private String phone;
+	
+	private int age;
 
 }

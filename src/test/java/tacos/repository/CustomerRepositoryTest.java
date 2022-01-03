@@ -19,19 +19,19 @@ public class CustomerRepositoryTest {
 	private CustomerRepository customerRepository;
 	
 	@Test
-	void whenFindByName_thenReturnCustomer() {
+	void whenFindByFirstName_thenReturnCustomer() {
 		//given
 		Customer alex = new Customer();
-		alex.setName("alex");
+		alex.setFirstName("alex");
 		
 		testEntityManager.persist(alex);
 		testEntityManager.flush();
 		
 		//when
-		Customer customer = this.customerRepository.findByName("alex");
+		Customer customer = this.customerRepository.findByFirstName("alex");
 		
 		//then
-		assertThat(customer.getName()).isEqualTo(alex.getName());
+		assertThat(customer.getFirstName()).isEqualTo(alex.getFirstName());
 		
 	}
 	
@@ -39,17 +39,18 @@ public class CustomerRepositoryTest {
 	void whenFindByNameAndMail_thenReturnCustomer() {
 		//given
 		Customer alex = new Customer();
-		alex.setName("alex");
-		alex.setMail("alex@gmail.com");
+		alex.setFirstName("alex");
+		alex.setLastName("ross");
+		alex.setMail("alex.ross@gmail.com");
 		
 		testEntityManager.persist(alex);
 		testEntityManager.flush();
 		
 		//when
-		Customer customer = this.customerRepository.findByNameAndMail("alex", "alex@gmail.com");
+		Customer customer = this.customerRepository.findByFirstNameAndLastNameAndMail("alex", "ross", "alex.ross@gmail.com");
 		
 		//then
-		assertThat(customer.getName()).isEqualTo(alex.getName());
+		assertThat(customer.getMail()).isEqualTo(alex.getMail());
 		
 	}
 	

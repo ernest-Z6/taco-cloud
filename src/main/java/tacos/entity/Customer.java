@@ -5,6 +5,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import org.hibernate.annotations.GenericGenerator;
 
@@ -26,6 +27,14 @@ public class Customer {
     @Column(name = "id", updatable = false, nullable = false)
 	private String id;
 	
-	private String name;
+	private String firstName;
+	private String lastName;
+	
+	@Transient
+	private String fullName;
+	
 	private String mail;
+	private String phone;
+	
+	private int age;
 }

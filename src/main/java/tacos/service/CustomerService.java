@@ -52,12 +52,20 @@ public class CustomerService {
 		Customer customer = this.customerRepository.findById(request.getId())
 				.orElseThrow(() -> new ResourceNotFoundException(MessageConstants.CUSTOMER_NOT_FOUND));
 		Boolean updateFlag = false;
-		if (!ObjectUtils.isEmpty(request.getName())) {
-			customer.setName(request.getName());
+		if (!ObjectUtils.isEmpty(request.getFirstName())) {
+			customer.setFirstName(request.getFirstName());
 			updateFlag = true;
 		}
-		if (!ObjectUtils.isEmpty(request.getMail())) {
-			customer.setMail(request.getMail());
+		if (!ObjectUtils.isEmpty(request.getLastName())) {
+			customer.setMail(request.getLastName());
+			updateFlag = true;
+		}
+		if (!ObjectUtils.isEmpty(request.getPhone())) {
+			customer.setPhone(request.getPhone());
+			updateFlag = true;
+		}
+		if (!ObjectUtils.isEmpty(request.getAge())) {
+			customer.setAge(request.getAge());
 			updateFlag = true;
 		}
 		if (updateFlag) {
@@ -88,7 +96,7 @@ public class CustomerService {
 	}
 	
 	public List<CustomerResponse> getAllWithSorting() {
-		Sort sort = Sort.by(Sort.Direction.ASC, "name");
+		Sort sort = Sort.by(Sort.Direction.ASC, "firstName");
 		List<Customer> customerList = this.customerRepository.findAll(sort);
 
 		List<CustomerResponse> customerResponseList = new ArrayList<>();

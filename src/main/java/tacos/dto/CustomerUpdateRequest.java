@@ -14,9 +14,13 @@ public class CustomerUpdateRequest {
 	@NotNull
 	private String id;
 	
-	@JsonProperty("customerName")
-	private String name;
+	@JsonProperty("customerFirstName")
+	private String firstName;
 	
-	@JsonProperty("customerEmail")
-	private String mail;
+	@JsonProperty("customerLastName")
+	private String lastName;
+	
+	private String phone;
+	
+	private int age;
 }
