@@ -135,4 +135,29 @@ public class CustomerRepositoryTest {
 		assertThat(customer.getFirstName()).isEqualTo(john.getFirstName());
 		
 	}
+	
+	@Test
+	void testUpdateMail() {
+		Customer alex = new Customer();
+		alex.setFirstName("Alex");
+		alex.setLastName("Ross");
+		alex.setMail("alex@gmail.com");
+		
+		testEntityManager.persist(alex);
+		testEntityManager.flush();
+		
+		int num = this.customerRepository.updateMail("alex.ross@gmail.com", "Alex", "Ross");
+		System.out.println(alex.getMail());
+		System.out.println(this.customerRepository.getByFirstNameAndLastName("Alex", "Ross").getMail());
+		
+		testEntityManager.refresh(alex);
+		
+		System.out.println(alex.getMail());
+		System.out.println(this.customerRepository.getByFirstNameAndLastName("Alex", "Ross").getMail());
+		
+		assertThat(num).isEqualTo(1);
+		
+		num = this.customerRepository.updateMail("alex.ross@gmail.com", "John", "Smith");
+		assertThat(num).isEqualTo(0);
+	}
 }

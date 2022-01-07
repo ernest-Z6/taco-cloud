@@ -2,10 +2,13 @@ package tacos.repository;
 
 import java.util.List;
 
+
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import tacos.entity.Customer;
 
@@ -24,6 +27,11 @@ public interface CustomerRepository extends JpaRepository<Customer, String> {
 	
 	@Query("From Customer where firstName = ?1 and lastName = ?2")
 	Customer getByFirstNameAndLastName3(String firstName, String lastName);
+	
+	@Modifying
+	@Transactional
+	@Query("Update Customer set mail = :mail where firstName = :firstName and lastName = :lastName")
+	Integer updateMail(String mail, String firstName, String lastName);
 	
 	List<Customer> findByFirstNameOrMail(String firstName, String mail);
 	
