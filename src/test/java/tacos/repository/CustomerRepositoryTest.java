@@ -100,4 +100,39 @@ public class CustomerRepositoryTest {
 		customerList = this.customerRepository.findByLastNameEndsWith("ss");
 		assertThat(customerList.size()).isEqualTo(2);
 	}
+	
+	@Test
+	void whenGetByFirstNameAndLastName_thenReturnCustomer() {
+		//given
+		Customer alex = new Customer();
+		alex.setFirstName("Alex");
+		alex.setLastName("Ross");
+		
+		Customer john = new Customer();
+		john.setFirstName("John");
+		john.setLastName("Smith");
+		
+		testEntityManager.persist(alex);
+		testEntityManager.persist(john);
+		testEntityManager.flush();
+		
+		//when
+		Customer customer = this.customerRepository.getByFirstNameAndLastName("Alex", "Ross");
+		
+		//then
+		assertThat(customer.getFirstName()).isEqualTo(alex.getFirstName());
+		
+		//when
+		customer = this.customerRepository.getByFirstNameAndLastName2("John", "Smith");
+		
+		//then
+		assertThat(customer.getFirstName()).isEqualTo(john.getFirstName());
+		
+		//when
+		customer = this.customerRepository.getByFirstNameAndLastName3("John", "Smith");
+		
+		//then
+		assertThat(customer.getFirstName()).isEqualTo(john.getFirstName());
+		
+	}
 }
