@@ -160,4 +160,23 @@ public class CustomerRepositoryTest {
 		num = this.customerRepository.updateMail("alex.ross@gmail.com", "John", "Smith");
 		assertThat(num).isEqualTo(0);
 	}
+	
+	@Test
+	void testDeleteCustomer() {
+		Customer alex = new Customer();
+		alex.setFirstName("Alex");
+		alex.setLastName("Ross");
+		
+		Customer john = new Customer();
+		john.setFirstName("John");
+		john.setLastName("Smith");
+		
+		testEntityManager.persist(alex);
+		testEntityManager.persist(john);
+		testEntityManager.flush();
+		
+		this.customerRepository.deleteByFirstName("Alex");
+		
+		assertThat(this.customerRepository.findAll().size()).isEqualTo(1);
+	}
 }

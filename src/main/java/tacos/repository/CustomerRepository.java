@@ -33,6 +33,11 @@ public interface CustomerRepository extends JpaRepository<Customer, String> {
 	@Query("Update Customer set mail = :mail where firstName = :firstName and lastName = :lastName")
 	Integer updateMail(String mail, String firstName, String lastName);
 	
+	@Modifying
+	@Transactional
+	@Query("Delete From Customer where firstName = :firstName")
+	Integer deleteByFirstName(String firstName);
+	
 	List<Customer> findByFirstNameOrMail(String firstName, String mail);
 	
 	List<Customer> findByFirstNameIn(List<String> firstNames);
