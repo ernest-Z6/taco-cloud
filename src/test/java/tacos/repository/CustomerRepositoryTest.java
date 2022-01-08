@@ -100,4 +100,83 @@ public class CustomerRepositoryTest {
 		customerList = this.customerRepository.findByLastNameEndsWith("ss");
 		assertThat(customerList.size()).isEqualTo(2);
 	}
+	
+	@Test
+	void whenGetByFirstNameAndLastName_thenReturnCustomer() {
+		//given
+		Customer alex = new Customer();
+		alex.setFirstName("Alex");
+		alex.setLastName("Ross");
+		
+		Customer john = new Customer();
+		john.setFirstName("John");
+		john.setLastName("Smith");
+		
+		testEntityManager.persist(alex);
+		testEntityManager.persist(john);
+		testEntityManager.flush();
+		
+		//when
+		Customer customer = this.customerRepository.getByFirstNameAndLastName("Alex", "Ross");
+		
+		//then
+		assertThat(customer.getFirstName()).isEqualTo(alex.getFirstName());
+		
+		//when
+		customer = this.customerRepository.getByFirstNameAndLastName2("John", "Smith");
+		
+		//then
+		assertThat(customer.getFirstName()).isEqualTo(john.getFirstName());
+		
+		//when
+		customer = this.customerRepository.getByFirstNameAndLastName3("John", "Smith");
+		
+		//then
+		assertThat(customer.getFirstName()).isEqualTo(john.getFirstName());
+		
+	}
+	
+	@Test
+	void testUpdateMail() {
+		Customer alex = new Customer();
+		alex.setFirstName("Alex");
+		alex.setLastName("Ross");
+		alex.setMail("alex@gmail.com");
+		
+		testEntityManager.persist(alex);
+		testEntityManager.flush();
+		
+		int num = this.customerRepository.updateMail("alex.ross@gmail.com", "Alex", "Ross");
+		System.out.println(alex.getMail());
+		System.out.println(this.customerRepository.getByFirstNameAndLastName("Alex", "Ross").getMail());
+		
+		testEntityManager.refresh(alex);
+		
+		System.out.println(alex.getMail());
+		System.out.println(this.customerRepository.getByFirstNameAndLastName("Alex", "Ross").getMail());
+		
+		assertThat(num).isEqualTo(1);
+		
+		num = this.customerRepository.updateMail("alex.ross@gmail.com", "John", "Smith");
+		assertThat(num).isEqualTo(0);
+	}
+	
+	@Test
+	void testDeleteCustomer() {
+		Customer alex = new Customer();
+		alex.setFirstName("Alex");
+		alex.setLastName("Ross");
+		
+		Customer john = new Customer();
+		john.setFirstName("John");
+		john.setLastName("Smith");
+		
+		testEntityManager.persist(alex);
+		testEntityManager.persist(john);
+		testEntityManager.flush();
+		
+		this.customerRepository.deleteByFirstName("Alex");
+		
+		assertThat(this.customerRepository.findAll().size()).isEqualTo(1);
+	}
 }
