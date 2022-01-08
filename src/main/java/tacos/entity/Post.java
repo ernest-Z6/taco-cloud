@@ -4,10 +4,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
-import javax.persistence.Transient;
 
 import org.hibernate.annotations.GenericGenerator;
 
@@ -18,7 +15,7 @@ import lombok.Setter;
 @Setter
 @Entity
 @Table
-public class Customer {
+public class Post {
 
 	@Id
 	@GeneratedValue(generator = "UUID")
@@ -29,19 +26,8 @@ public class Customer {
     @Column(name = "id", updatable = false, nullable = false)
 	private String id;
 	
-	private String firstName;
-	private String lastName;
+	private String postalCode;
 	
-	@Transient
-	private String fullName;
+	private String city;
 	
-	private String mail;
-	private String phone;
-	
-	private int age;
-	
-	@OneToOne
-	@JoinColumn(name = "post_id")
-	private Post post;
-
 }
