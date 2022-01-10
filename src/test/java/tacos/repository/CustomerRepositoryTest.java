@@ -10,6 +10,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 
 import tacos.entity.Customer;
+import tacos.entity.Post;
 
 @DataJpaTest
 public class CustomerRepositoryTest {
@@ -133,6 +134,48 @@ public class CustomerRepositoryTest {
 		
 		//then
 		assertThat(customer.getFirstName()).isEqualTo(john.getFirstName());
+		
+	}
+	
+	@Test
+	void whenFindByCity_thenReturnCustomers() {
+		//given
+		Customer alex = new Customer();
+		alex.setFirstName("alex");
+		alex.setLastName("ross");
+		Post post = new Post();
+		post.setCity("Delhi");
+		alex.setPost(post);
+		
+		Customer john = new Customer();
+		john.setFirstName("john");
+		john.setLastName("smith");
+		Post post2 = new Post();
+		post2.setCity("Delhi");
+		john.setPost(post2);
+		
+		Customer ross = new Customer();
+		ross.setFirstName("ross");
+		ross.setLastName("klass");
+		Post post3 = new Post();
+		post3.setCity("Tokyo");
+		ross.setPost(post3);
+		
+		testEntityManager.persistAndFlush(alex);
+		testEntityManager.persistAndFlush(john);
+		testEntityManager.persistAndFlush(ross);
+		
+		//when
+		List<Customer> customers = this.customerRepository.findByPostCity("Delhi");
+		
+		//then
+		assertThat(customers.size()).isEqualTo(2);
+		
+		//when
+		customers = this.customerRepository.getByPostCity("Delhi");
+		
+		//then
+		assertThat(customers.size()).isEqualTo(2);
 		
 	}
 	

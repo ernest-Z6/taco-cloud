@@ -50,4 +50,10 @@ public interface CustomerRepository extends JpaRepository<Customer, String> {
 	
 	List<Customer> findByFirstNameStartsWith(String prefex);
 	List<Customer> findByLastNameEndsWith(String suffix);
+	
+	List<Customer> findByPostCity(String city);
+	
+	@Query("From Customer where post.city = :city")
+	List<Customer> getByPostCity(String city);
+	
 }
