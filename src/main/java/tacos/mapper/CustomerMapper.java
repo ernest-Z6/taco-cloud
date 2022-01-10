@@ -4,7 +4,7 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Named;
 
-import tacos.dto.CustomerRequest;
+import tacos.dto.CustomerCreateRequest;
 import tacos.dto.CustomerResponse;
 import tacos.dto.CustomerUpdateRequest;
 import tacos.entity.Customer;
@@ -13,14 +13,19 @@ import tacos.entity.Customer;
 public interface CustomerMapper {
 
 	@Mapping(target = "name", source = ".", qualifiedByName = "toFullName")
+	@Mapping(target = "postalCode", source = "post.postalCode")
 	CustomerResponse toCustomerResponse(Customer customer);
 	
 	@Mapping(target = "id", ignore = true)
 	@Mapping(target = "fullName", ignore = true)
-	Customer fromCustomerRequest(CustomerRequest customerRequest);
+	@Mapping(target = "post", source = "post")
+	@Mapping(target = "post.id", ignore = true)
+	Customer fromCustomerRequest(CustomerCreateRequest customerRequest);
 	
 	@Mapping(target = "fullName", ignore = true)
 	@Mapping(target = "mail", ignore = true)
+	@Mapping(target = "post", source = "post")
+	@Mapping(target = "post.city", ignore = true)
 	Customer fromCustomerRequest(CustomerUpdateRequest customerUpdateRequest);
 	
 	@Named("toFullName")

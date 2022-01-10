@@ -22,5 +22,8 @@ public class CustomerResponse {
 	@JsonIgnore
 	private String mail;
 	
-
+	private String phone;
+	
+	private String postalCode;
+	
 }

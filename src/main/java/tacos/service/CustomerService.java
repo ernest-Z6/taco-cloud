@@ -15,7 +15,7 @@ import org.springframework.util.ObjectUtils;
 
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import tacos.dto.CustomerRequest;
+import tacos.dto.CustomerCreateRequest;
 import tacos.dto.CustomerResponse;
 import tacos.dto.CustomerUpdateRequest;
 import tacos.entity.Customer;
@@ -43,7 +43,7 @@ public class CustomerService {
 		return customerResponseList;
 	}
 	
-	public CustomerResponse createCustomer(CustomerRequest request) {
+	public CustomerResponse createCustomer(CustomerCreateRequest request) {
 		Customer customer = this.customerMapper.fromCustomerRequest(request);
 		return this.customerMapper.toCustomerResponse(this.customerRepository.save(customer));
 	}

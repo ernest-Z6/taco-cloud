@@ -23,4 +23,6 @@ public class CustomerUpdateRequest {
 	private String phone;
 	
 	private int age;
+	
+	private PostUpdateRequest post;
 }

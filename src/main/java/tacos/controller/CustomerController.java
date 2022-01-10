@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import lombok.AllArgsConstructor;
-import tacos.dto.CustomerRequest;
+import tacos.dto.CustomerCreateRequest;
 import tacos.dto.CustomerResponse;
 import tacos.dto.CustomerUpdateRequest;
 import tacos.exception.ResourceNotFoundException;
@@ -30,18 +30,13 @@ public class CustomerController {
 	
 	CustomerService customerService;
 
-	@GetMapping
-	public CustomerResponse getCustomer() {
-		return new CustomerResponse("John", "John.Ross@dbschenker.com");
-	}
-	
 	@GetMapping("/all")
 	public List<CustomerResponse> getAllCustomer() {
 		return this.customerService.getAll();
 	}
 	
 	@PostMapping
-	public CustomerResponse createCustomer(@Valid @RequestBody CustomerRequest request) {
+	public CustomerResponse createCustomer(@Valid @RequestBody CustomerCreateRequest request) {
 		return this.customerService.createCustomer(request);
 	}
 	

@@ -9,7 +9,7 @@ import lombok.Setter;
 
 @Setter
 @Getter
-public class CustomerRequest {
+public class CustomerCreateRequest {
 	
 	@JsonProperty("customerFirstName")
 	@NotBlank
@@ -25,5 +25,7 @@ public class CustomerRequest {
 	private String phone;
 	
 	private int age;
+	
+	private PostCreateRequest post;
 
 }

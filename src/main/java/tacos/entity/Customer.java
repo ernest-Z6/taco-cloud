@@ -1,5 +1,6 @@
 package tacos.entity;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -40,7 +41,7 @@ public class Customer {
 	
 	private int age;
 	
-	@OneToOne
+	@OneToOne(cascade = CascadeType.PERSIST)
 	@JoinColumn(name = "post_id")
 	private Post post;
 
