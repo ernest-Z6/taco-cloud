@@ -18,13 +18,11 @@ public interface CustomerMapper {
 	
 	@Mapping(target = "id", ignore = true)
 	@Mapping(target = "fullName", ignore = true)
-	@Mapping(target = "post", source = "post")
 	@Mapping(target = "post.id", ignore = true)
 	Customer fromCustomerRequest(CustomerCreateRequest customerRequest);
 	
 	@Mapping(target = "fullName", ignore = true)
 	@Mapping(target = "mail", ignore = true)
-	@Mapping(target = "post", source = "post")
 	@Mapping(target = "post.city", ignore = true)
 	Customer fromCustomerRequest(CustomerUpdateRequest customerUpdateRequest);
 	
