@@ -29,6 +29,13 @@ import tacos.service.CustomerService;
 public class CustomerController {
 	
 	CustomerService customerService;
+	
+	@GetMapping
+	public CustomerResponse getJohn() {
+		CustomerResponse response = new CustomerResponse();
+		response.setName("John");
+		return response;
+	}
 
 	@GetMapping("/all")
 	public List<CustomerResponse> getAllCustomer() {
