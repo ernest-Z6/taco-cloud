@@ -42,6 +42,11 @@ public class CustomerController {
 		return this.customerService.getAll();
 	}
 	
+	@GetMapping("/getByCity/{city}")
+	public List<CustomerResponse> getByCity(@PathVariable String city) {
+		return this.customerService.getByCity(city);
+	}
+	
 	@PostMapping
 	public CustomerResponse createCustomer(@Valid @RequestBody CustomerCreateRequest request) {
 		return this.customerService.createCustomer(request);

@@ -43,6 +43,17 @@ public class CustomerService {
 		return customerResponseList;
 	}
 	
+	public List<CustomerResponse> getByCity(String city) {
+		List<Customer> customerList = this.customerRepository.findByPostCity(city);
+		
+		List<CustomerResponse> customerResponseList = new ArrayList<>();
+		customerList.stream().forEach(customer -> {
+			customerResponseList.add(this.customerMapper.toCustomerResponse(customer));
+		});
+		
+		return customerResponseList;
+	}
+	
 	public CustomerResponse createCustomer(CustomerCreateRequest request) {
 		Customer customer = this.customerMapper.fromCustomerRequest(request);
 		return this.customerMapper.toCustomerResponse(this.customerRepository.save(customer));
