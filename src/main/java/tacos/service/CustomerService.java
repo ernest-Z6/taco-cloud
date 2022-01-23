@@ -3,6 +3,7 @@ package tacos.service;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.hibernate.proxy.HibernateProxy;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
@@ -45,6 +46,10 @@ public class CustomerService {
 	
 	public List<CustomerResponse> getByCity(String city) {
 		List<Customer> customerList = this.customerRepository.findByPostCity(city);
+		
+		// Lazy Loading
+		log.info("Post is instance of Hibernate Proxy: " + 
+				(customerList.get(0).getPost() instanceof HibernateProxy));
 		
 		List<CustomerResponse> customerResponseList = new ArrayList<>();
 		customerList.stream().forEach(customer -> {
