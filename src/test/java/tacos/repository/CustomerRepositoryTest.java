@@ -4,6 +4,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import java.util.List;
 
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
@@ -21,182 +23,129 @@ public class CustomerRepositoryTest {
 	@Autowired
 	private CustomerRepository customerRepository;
 	
-	@Test
-	void whenFindByFirstName_thenReturnCustomer() {
-		//given
-		Customer alex = new Customer();
-		alex.setFirstName("alex");
+	@BeforeEach
+	public void init() {
+		Customer alex = Customer.builder()
+				.firstName("alex")
+				.lastName("ross")
+				.mail("alex.ross@gmail.com")
+				.post(Post.builder()
+						.city("Delhi")
+						.postalCode("0000")
+						.build())
+				.build();
+		
+		Customer john = Customer.builder()
+				.firstName("john")
+				.lastName("smith")
+				.mail("john.smith@outlook.com")
+				.post(Post.builder()
+						.city("Delhi")
+						.postalCode("0001")
+						.build())
+				.build();
+		
+		Customer ross = Customer.builder()
+				.firstName("ross")
+				.lastName("klass")
+				.mail("ross.klass@db.com")
+				.post(Post.builder()
+						.city("Tokyo")
+						.postalCode("881")
+						.build())
+				.build();
 		
 		testEntityManager.persist(alex);
+		testEntityManager.persist(john);
+		testEntityManager.persist(ross);
+		
 		testEntityManager.flush();
+		
+	}
+	
+	@AfterEach
+	public void clean() {
+		testEntityManager.clear();
+	}
+	
+	@Test
+	void testFindByOneProperty() {
 		
 		//when
 		Customer customer = this.customerRepository.findByFirstName("alex");
 		
 		//then
-		assertThat(customer.getFirstName()).isEqualTo(alex.getFirstName());
+		assertThat(customer.getFirstName()).isEqualTo("alex");
 		
 	}
 	
 	@Test
-	void whenFindByNameAndMail_thenReturnCustomer() {
-		//given
-		Customer alex = new Customer();
-		alex.setFirstName("alex");
-		alex.setLastName("ross");
-		alex.setMail("alex.ross@gmail.com");
-		
-		testEntityManager.persist(alex);
-		testEntityManager.flush();
+	void testFindBySeveralProperties() {
 		
 		//when
 		Customer customer = this.customerRepository.findByFirstNameAndLastNameAndMail("alex", "ross", "alex.ross@gmail.com");
 		
 		//then
-		assertThat(customer.getMail()).isEqualTo(alex.getMail());
+		assertThat(customer.getMail()).isEqualTo("alex.ross@gmail.com");
 		
 	}
 	
 	@Test
-	void whenFindByFirstNameLike_thenReturnCustomer() {
-		//given
-		Customer Alex = new Customer();
-		Alex.setFirstName("alex");
-		Alex.setLastName("ross");
-		Alex.setMail("alex.ross@gmail.com");
+	void testFindWithDifferentSuffix() {
 		
-		Customer Joe = new Customer();
-		Joe.setFirstName("joe");
-		Joe.setLastName("smith");
-		Joe.setMail("joe.smith@gmail.com");
-		
-		Customer Kobe = new Customer();
-		Kobe.setFirstName("kobe");
-		Kobe.setLastName("ross");
-		Kobe.setMail("kobe.ross@gmail.com");
-		
-		testEntityManager.persist(Alex);
-		testEntityManager.persist(Joe);
-		testEntityManager.persist(Kobe);
-		testEntityManager.flush();
-		
-		//when
+		//Contains
 		List<Customer> customerList = this.customerRepository.findByFirstNameContains("o");
-		
-		//then
 		assertThat(customerList.size()).isEqualTo(2);
 		
+		//Containing
 		customerList = this.customerRepository.findByFirstNameContaining("o");
 		assertThat(customerList.size()).isEqualTo(2);
 		
+		//IsContaining
 		customerList = this.customerRepository.findByFirstNameIsContaining("o");
 		assertThat(customerList.size()).isEqualTo(2);
 		
-		customerList = this.customerRepository.findByLastNameLike("%os%");
+		//Like
+		customerList = this.customerRepository.findByLastNameLike("%ss%");
 		assertThat(customerList.size()).isEqualTo(2);
 		
-		customerList =  this.customerRepository.findByFirstNameStartsWith("ko");
+		//StartsWith
+		customerList =  this.customerRepository.findByFirstNameStartsWith("al");
 		assertThat(customerList.size()).isEqualTo(1);
 		
+		//EndsWith
 		customerList = this.customerRepository.findByLastNameEndsWith("ss");
 		assertThat(customerList.size()).isEqualTo(2);
 	}
 	
 	@Test
-	void whenGetByFirstNameAndLastName_thenReturnCustomer() {
-		//given
-		Customer alex = new Customer();
-		alex.setFirstName("Alex");
-		alex.setLastName("Ross");
+	void testFindByJPQL() {
+		Customer customer = this.customerRepository.getByFirstNameAndLastName("alex", "ross");
+		assertThat(customer.getFirstName()).isEqualTo("alex");
 		
-		Customer john = new Customer();
-		john.setFirstName("John");
-		john.setLastName("Smith");
+		customer = this.customerRepository.getByFirstNameAndLastName2("john", "smith");
+		assertThat(customer.getFirstName()).isEqualTo("john");
 		
-		testEntityManager.persist(alex);
-		testEntityManager.persist(john);
-		testEntityManager.flush();
-		
-		//when
-		Customer customer = this.customerRepository.getByFirstNameAndLastName("Alex", "Ross");
-		
-		//then
-		assertThat(customer.getFirstName()).isEqualTo(alex.getFirstName());
-		
-		//when
-		customer = this.customerRepository.getByFirstNameAndLastName2("John", "Smith");
-		
-		//then
-		assertThat(customer.getFirstName()).isEqualTo(john.getFirstName());
-		
-		//when
-		customer = this.customerRepository.getByFirstNameAndLastName3("John", "Smith");
-		
-		//then
-		assertThat(customer.getFirstName()).isEqualTo(john.getFirstName());
-		
+		customer = this.customerRepository.getByFirstNameAndLastName3("john", "smith");
+		assertThat(customer.getFirstName()).isEqualTo("john");
 	}
 	
 	@Test
-	void whenFindByCity_thenReturnCustomers() {
-		//given
-		Customer alex = new Customer();
-		alex.setFirstName("alex");
-		alex.setLastName("ross");
-		Post post = new Post();
-		post.setCity("Delhi");
-		alex.setPost(post);
+	void testLazyLoading() {
 		
-		Customer john = new Customer();
-		john.setFirstName("john");
-		john.setLastName("smith");
-		Post post2 = new Post();
-		post2.setCity("Delhi");
-		john.setPost(post2);
-		
-		Customer ross = new Customer();
-		ross.setFirstName("ross");
-		ross.setLastName("klass");
-		Post post3 = new Post();
-		post3.setCity("Tokyo");
-		ross.setPost(post3);
-		
-		testEntityManager.persistAndFlush(alex);
-		testEntityManager.persistAndFlush(john);
-		testEntityManager.persistAndFlush(ross);
-		
-		//when
-		List<Customer> customers = this.customerRepository.findByPostCity("Delhi");
-		
-		//then
-		assertThat(customers.size()).isEqualTo(2);
-		
-		//when
-		customers = this.customerRepository.getByPostCity("Delhi");
-		
-		//then
-		assertThat(customers.size()).isEqualTo(2);
+		//TODO How to test Lazy Fetch in Unit test?
 		
 	}
 	
 	@Test
 	void testUpdateMail() {
-		Customer alex = new Customer();
-		alex.setFirstName("Alex");
-		alex.setLastName("Ross");
-		alex.setMail("alex@gmail.com");
 		
-		testEntityManager.persist(alex);
-		testEntityManager.flush();
-		
-		int num = this.customerRepository.updateMail("alex.ross@gmail.com", "Alex", "Ross");
+		int num = this.customerRepository.updateMail("alex.ross@gmail66.com", "alex", "ross");
+		Customer alex = this.customerRepository.getByFirstNameAndLastName("alex", "ross");
+
 		System.out.println(alex.getMail());
-		System.out.println(this.customerRepository.getByFirstNameAndLastName("Alex", "Ross").getMail());
-		
 		testEntityManager.refresh(alex);
-		
 		System.out.println(alex.getMail());
-		System.out.println(this.customerRepository.getByFirstNameAndLastName("Alex", "Ross").getMail());
 		
 		assertThat(num).isEqualTo(1);
 		
@@ -206,20 +155,7 @@ public class CustomerRepositoryTest {
 	
 	@Test
 	void testDeleteCustomer() {
-		Customer alex = new Customer();
-		alex.setFirstName("Alex");
-		alex.setLastName("Ross");
-		
-		Customer john = new Customer();
-		john.setFirstName("John");
-		john.setLastName("Smith");
-		
-		testEntityManager.persist(alex);
-		testEntityManager.persist(john);
-		testEntityManager.flush();
-		
-		this.customerRepository.deleteByFirstName("Alex");
-		
-		assertThat(this.customerRepository.findAll().size()).isEqualTo(1);
+		this.customerRepository.deleteByFirstName("alex");
+		assertThat(this.customerRepository.findAll().size()).isEqualTo(2);
 	}
 }
